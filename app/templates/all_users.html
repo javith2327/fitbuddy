@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FitBuddy — Users</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main class="container wide">
+  <header class="topbar">
+    <div><span class="badge">ADMIN / COACH</span><h1>All Users</h1></div>
+    <a class="button secondary" href="/">Home</a>
+  </header>
+
+  {% if not users %}
+    <section class="card"><p>No users yet.</p></section>
+  {% else %}
+  {% for user in users %}
+  <section class="admin-card card">
+    <div class="section-head">
+      <div>
+        <h2>{{ user.username }} <small>({{ user.user_id }})</small></h2>
+        <p class="muted">{{ user.age }} yrs · {{ user.weight }} kg · {{ user.goal }} · {{ user.intensity|title }}</p>
+      </div>
+      <form action="/delete-user/{{ user.user_id }}" method="post" onsubmit="return confirm('Delete this user and their plan?')">
+        <button class="danger" type="submit">Delete</button>
+      </form>
+    </div>
+    {% if user.plan %}
+      <details>
+        <summary>Original plan</summary>
+        <pre class="plan compact">{{ user.plan.original_plan }}</pre>
+      </details>
+      {% if user.plan.updated_plan %}
+      <details>
+        <summary>Updated plan</summary>
+        <pre class="plan compact">{{ user.plan.updated_plan }}</pre>
+      </details>
+      <p><b>Last feedback:</b> {{ user.plan.last_feedback }}</p>
+      {% endif %}
+    {% else %}
+      <p class="muted">No plan stored.</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+  {% endif %}
+</main>
+</body>
+</html>

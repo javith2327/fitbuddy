@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ user.username }} — FitBuddy Plan</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<main class="container wide">
+  <header class="topbar">
+    <div><span class="badge">FITBUDDY</span><h1>{{ user.username }}'s Plan</h1></div>
+    <a class="button secondary" href="/">New Plan</a>
+  </header>
+
+  <section class="profile card">
+    <div><b>User ID</b><span>{{ user.user_id }}</span></div>
+    <div><b>Age</b><span>{{ user.age }}</span></div>
+    <div><b>Weight</b><span>{{ user.weight }} kg</span></div>
+    <div><b>Goal</b><span>{{ user.goal }}</span></div>
+    <div><b>Intensity</b><span>{{ user.intensity|title }}</span></div>
+  </section>
+
+  {% if is_updated %}
+  <div class="notice">✓ Your plan was updated from your feedback.</div>
+  {% endif %}
+
+  <section class="card">
+    <div class="section-head"><h2>7-Day Workout Plan</h2><span class="badge">{{ "UPDATED" if is_updated else "ORIGINAL" }}</span></div>
+    <pre class="plan">{{ display_plan }}</pre>
+  </section>
+
+  <section class="tip card">
+    <h2>🥗 Nutrition / Recovery Tip</h2>
+    <p>{{ display_tip }}</p>
+  </section>
+
+  <section class="card">
+    <h2>Refine your plan</h2>
+    <p class="muted">Tell FitBuddy what you want changed: more cardio, less volume, an extra rest day, etc.</p>
+    <form action="/submit-feedback" method="post">
+      <input type="hidden" name="user_id" value="{{ user.user_id }}">
+      <textarea name="feedback" rows="5" maxlength="2000" required placeholder="Example: Add more cardio and make Day 4 a rest day."></textarea>
+      <button class="primary" type="submit">Update Plan with AI →</button>
+    </form>
+  </section>
+
+  <p class="disclaimer">AI-generated guidance can be inaccurate. Stop if an exercise causes pain and consult a qualified professional for individualized medical or training advice.</p>
+</main>
+</body>
+</html>
